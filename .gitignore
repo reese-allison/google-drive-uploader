@@ -1,0 +1,88 @@
+# Python
+*.pyc
+common/*/__pycache__/
+common/*/__pycache__
+**/__pycache__
+
+# Ingore celery configurations
+
+celerybeat-schedule.bak
+celerybeat-schedule.dat
+celerybeat-schedule.dir
+celery_start.bat
+celery_start_eventlet.bat
+celery_start_prefork.bat
+
+# Static assets compiled on init
+static/.webassets-cache
+static/.webassets-manifest
+static/bundle/*.js
+static/bundle/*.css
+
+# Temp files generated on ini
+temp
+
+# Ignore upload folder
+upload
+
+# Ignore git folder
+git
+
+# Patchfile for GIT
+patchfile
+
+# Hide config files
+web.config
+config.py
+wfastcgi.py
+*.config
+*.conf
+!system.conf
+!loggly.conf
+settings.json
+
+# Hide IIS
+aspnet_client
+
+# Hide logs
+logs
+
+### VisualStudioCode template
+.vscode
+.pytest_cache/*
+.pytest_cache
+.jshintrc
+
+### PyCharm Template
+.idea
+
+### Windows template
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+### macOS template
+# General
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+#Node
+node_modules/
+static/js/dist/
+
+# Ignore stored sql
+*.sql
+
+# Ignore saved http calls
+*.http
+
+# Hide test coverage
+.coverage
+/htmlcov
+
+# Project specific
+sync
+service-account.json
+token
