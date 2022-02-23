@@ -1,50 +1,40 @@
-import discord
-import uploader
+import disnake
 import mimetypes
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
-class MyClient(discord.Client):
-    SYNCED = False
+client = disnake.Client()
 
-    async def on_message(self, message):
-        # Do not respond to ourselves
-        if message.author == self.user:
-            return
 
-        if not self.SYNCED:
-            last_id = 0
-            try:
-                with open("sync", "r") as file:
-                    last_id = int(file.readline())
-            except (FileNotFoundError, ValueError):
-                pass 
-            async for message in message.channel.history(
-                limit=200
-            ):
-                if message.id > last_id and message.attachments:
-                    for attachment in message.attachments:
-                        if attachment.content_type is None:
-                            attachment.content_type = mimetypes.guess_type(attachment.filename)
-                        if 'image' in attachment.content_type or 'video' in attachment.content_type:
-                            file_link = await uploader.upload(message, attachment)
-                            await message.channel.send(file_link)
-            self.SYNCED = True
+class UploadView(disnake.ui.View):
+  def __init__(self, urls):
+    super().__init__()
 
-        if message.content == 'gdu folder':
-            folder_link = await uploader.get_drive(message)       
-            await message.channel.send(folder_link)
+    url = f'{os.getenv("SCRIPT")}?'
+    for i, u in enumerate(urls):
+        url += f'url{i}={u}&'
+    supportServerButton = disnake.ui.Button(style=disnake.ButtonStyle.link, label='Upload to Drive', url=url)
+    self.add_item(supportServerButton)
+    
 
-        if message.attachments:
-            for attachment in message.attachments:
-                if 'image' in attachment.content_type or 'video' in attachment.content_type:
-                    file_link = await uploader.upload(message, attachment)
-                    await message.channel.send(file_link)
 
-client = MyClient()
-discord_token = None
-try:
-    with open("token", "r") as file:
-        discord_token = file.readline()
-except FileNotFoundError:
-    print("Please create a token file with your Discord token") 
-client.run(discord_token)
+@client.event
+async def on_message(message):
+    # Do not respond to ourselves
+    if message.author == client.user:
+        return
+
+    if message.attachments and message.content == 'upload':
+        urls = []
+        for attachment in message.attachments:
+            if attachment.content_type is None:
+                attachment.content_type = mimetypes.guess_type(attachment.filename)
+            if 'image' in attachment.content_type or 'video' in attachment.content_type:
+                urls.append(attachment.url)
+        await message.reply(view=UploadView(urls))
+
+
+client.run(os.getenv('TOKEN'))

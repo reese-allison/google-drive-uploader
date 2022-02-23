@@ -31,6 +31,9 @@ git
 # Patchfile for GIT
 patchfile
 
+# Hide key files
+*.pem
+
 # Hide config files
 web.config
 config.py
@@ -40,6 +43,7 @@ wfastcgi.py
 !system.conf
 !loggly.conf
 settings.json
+.env
 
 # Hide IIS
 aspnet_client
@@ -81,8 +85,3 @@ static/js/dist/
 # Hide test coverage
 .coverage
 /htmlcov
-
-# Project specific
-sync
-service-account.json
-token
