@@ -60,7 +60,7 @@ async def upload(inter,
     
     message = "Uploaded 1 file to Discord"
     if upload_count > 1:
-        message = f"Uploaded {upload_count} files Discord"
+        message = f"Uploaded {upload_count} files to Discord"
     await inter.followup.send(
         message,
         embeds=embeds,
